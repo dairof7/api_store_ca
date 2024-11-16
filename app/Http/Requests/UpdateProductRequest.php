@@ -28,4 +28,20 @@ class UpdateProductRequest extends FormRequest
             'price.min' => 'El precio no puede ser negativo.',
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            // Claves permitidas en el payload
+            $allowedKeys = ['name', 'description', 'price', 'category'];
+
+            // Verificar si al menos una clave válida está presente
+            $inputKeys = array_keys($this->all());
+            $hasValidKeys = !empty(array_intersect($inputKeys, $allowedKeys));
+
+            if (!$hasValidKeys) {
+                $validator->errors()->add('fields', 'Debe proporcionar al menos un campo válido para actualizar.');
+            }
+        });
+    }
 }
