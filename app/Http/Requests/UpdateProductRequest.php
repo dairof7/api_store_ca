@@ -4,13 +4,37 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class UpdateProductRequest
+ *
+ * This request handles validation for updating an existing product. It ensures that
+ * the input data conforms to the required rules for product updates and provides
+ * custom error messages for specific fields.
+ */
 class UpdateProductRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * This method currently allows all users to send this request.
+     * You can modify this logic to implement authorization based on user roles
+     * or permissions.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Define the validation rules for the request.
+     *
+     * These rules are applied when updating a product. Fields like 'name', 'price',
+     * and 'category' are optional but, if provided, they must meet specific criteria.
+     *
+     * @return array<string, string> An array of field rules.
+     */
     public function rules(): array
     {
         return [
@@ -21,6 +45,15 @@ class UpdateProductRequest extends FormRequest
         ];
     }
 
+    /**
+     * Custom error messages for validation failures.
+     *
+     * This method allows you to provide user-friendly error messages for specific
+     * validation rules. These messages will be returned in the response when
+     * validation fails.
+     *
+     * @return array<string, string> An array of custom error messages.
+     */
     public function messages(): array
     {
         return [
@@ -29,13 +62,23 @@ class UpdateProductRequest extends FormRequest
         ];
     }
 
+    /**
+     * Additional validation logic after the default validation.
+     *
+     * This method allows you to perform custom validation checks, such as verifying
+     * that at least one valid field is provided for the update. If no valid field is found,
+     * an error is added to the validator.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     */
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            // Claves permitidas en el payload
+            // List of allowed keys in the request payload
             $allowedKeys = ['name', 'description', 'price', 'category'];
 
-            // Verificar si al menos una clave válida está presente
+            // Check if at least one valid key is present in the input
             $inputKeys = array_keys($this->all());
             $hasValidKeys = !empty(array_intersect($inputKeys, $allowedKeys));
 
