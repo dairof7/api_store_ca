@@ -2,8 +2,6 @@
 
 API RESTful para la gestión de productos en un catálogo de tienda online, implementada con Laravel 11 siguiendo los principios de Clean Architecture.
 
-[Las secciones anteriores se mantienen igual...]
-
 ## Arquitectura y Decisiones de Diseño
 
 ### Clean Architecture
